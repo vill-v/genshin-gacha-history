@@ -7,6 +7,22 @@ const bannerCode = {
 let data = null;
 let status = "done";
 let gachaList = null;
+//order from most to least significant
+//positive = ascending
+let columnOrder = [
+	{col:"gacha_type", asc:1},
+	{col:"item_type", asc:1},
+	{col:"rank_type", asc:-1},
+	{col:"time", asc:1},
+	{col:"name", asc:1},
+];
+const comparators = {
+	"gacha_type":(a,b)=>a-b,
+	"item_type":(a,b)=>a.localeCompare(b),
+	"name":(a,b)=>a.localeCompare(b),
+	"rank_type":(a,b)=>a-b,
+	"time":(a,b)=>a.localeCompare(b),
+}
 
 function bannerLookup(code, time){
 	return bannerCode[code];
@@ -47,7 +63,9 @@ async function extractResponses(){
 	}
 }
 
-function viewData(){
+function displayTable(){
+	gachaList.sort(sortFunction);
+
 	const table = document.getElementById("table");
 	let tbody = document.createElement("tbody");
 	table.removeChild(table.children[1]);
@@ -89,6 +107,18 @@ function viewData(){
 	}
 }
 
+function sortFunction(a,b){
+	let comparison = 0;
+	for(const rule of columnOrder){
+		const f = comparators[rule.col];
+		const aa = a[rule.col];
+		const bb = b[rule.col];
+		comparison = f(aa,bb) * rule.asc;
+		if(comparison !== 0) break;
+	}
+	return comparison;
+}
+
 document.getElementById("filein").addEventListener("change",
 	function(){
 		const files = this.files;
@@ -100,7 +130,7 @@ document.getElementById("filein").addEventListener("change",
 			status = "loading";
 			readFile(files[0])
 				.then(()=>extractResponses())
-				.then(()=>viewData());
+				.then(()=>displayTable());
 		}
 	}
 );
