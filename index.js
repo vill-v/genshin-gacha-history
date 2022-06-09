@@ -1,6 +1,17 @@
+const bannerCode = {
+	"100":"Beginners' Wish",
+	"200":"Wanderlust Invocation",
+	"301":"Character Event Wish",
+	"302":"Epitome Invocation",
+};
 let data = null;
 let status = "done";
 let gachaList = null;
+
+function bannerLookup(code, time){
+	return bannerCode[code];
+	//future: can look up specific banners based on time
+}
 
 async function readFile(file){
 	let t = await file.text();
@@ -42,22 +53,28 @@ function viewData(){
 			document.createElement("td"),
 			document.createElement("td"),
 			document.createElement("td"),
-			document.createElement("td"),
-			document.createElement("td"),
-			document.createElement("td"),
-			document.createElement("td"),
-			document.createElement("td"),
+			// document.createElement("td"),
+			// document.createElement("td"),
+			// document.createElement("td"),
+			// document.createElement("td"),
+			// document.createElement("td"),
 		];
-		cells[0].textContent = pull["count"];
-		cells[1].textContent = pull["gacha_type"];
-		cells[2].textContent = pull["id"];
-		cells[3].textContent = pull["item_id"];
-		cells[4].textContent = pull["item_type"];
-		cells[5].textContent = pull["lang"];
-		cells[6].textContent = pull["name"];
-		cells[7].textContent = pull["rank_type"];
-		cells[8].textContent = pull["time"];
-		cells[9].textContent = pull["uid"];
+		let banner = pull["gacha_type"];
+		let type = pull["item_type"];
+		let name = pull["name"];
+		let rarity = pull["rank_type"];
+		let time = pull["time"];
+		banner = bannerLookup(banner,time);
+		cells[0].textContent = banner;
+		cells[1].textContent = type;
+		cells[2].textContent = name;
+		cells[3].textContent = rarity;
+		cells[4].textContent = time;
+		// cells[5].textContent = pull["count"];
+		// cells[6].textContent = pull["id"];
+		// cells[7].textContent = pull["item_id"];
+		// cells[8].textContent = pull["lang"];
+		// cells[9].textContent = pull["uid"];
 		for(const c of cells){
 			row.append(c);
 		}
