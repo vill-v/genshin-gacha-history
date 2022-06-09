@@ -3,11 +3,30 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Genshin Gacha Log</title>
-	<script src="index.js"></script>
+	<script defer src="index.js"></script>
 </head>
 <body>
 <div>
-	a
+	<input id="filein" type="file" name="upload">
+</div>
+<div>
+	<table id="table">
+		<thead>
+		<tr>
+			<th>count</th>
+			<th>gacha_type</th>
+			<th>id</th>
+			<th>item_id</th>
+			<th>item_type</th>
+			<th>lang</th>
+			<th>name</th>
+			<th>rank_type</th>
+			<th>time</th>
+			<th>uid</th>
+		</tr>
+		</thead>
+		<tbody id="tbody"></tbody>
+	</table>
 </div>
 </body>
 </html>
