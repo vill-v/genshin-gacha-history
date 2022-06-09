@@ -10,11 +10,36 @@
 .r5{
     color: goldenrod;
 }
-.ch::before{
-    content:"c";
+.ch.Anemo::before{
+    background-image: url("img/anemo.png");
+}
+.ch.Cryo::before{
+    background-image: url("img/cryo.png");
+}
+.ch.Electro::before{
+    background-image: url("img/electro.png");
+}
+.ch.Geo::before{
+    background-image: url("img/geo.png");
+}
+.ch.Hydro::before{
+    background-image: url("img/hydro.png");
+}
+.ch.Pyro::before{
+    background-image: url("img/pyro.png");
 }
 .wp::before{
-    content:"w";
+    background-image: url("img/wep.png");
+}
+.ch::before,.wp::before{
+    content:"";
+    display: inline-block;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: 5px;
 }
 
 #view {

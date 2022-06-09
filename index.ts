@@ -49,6 +49,48 @@ const gachaItemRarityToCss = {
 	"4":"r4",
 	"5":"r5",
 }
+const gachaCharToElement = {
+	"Albedo": "Geo",
+	"Aloy": "Cryo",
+	"Amber": "Pyro",
+	"Barbara": "Hydro",
+	"Beidou": "Electro",
+	"Bennett": "Pyro",
+	"Chongyun": "Cryo",
+	"Diluc": "Pyro",
+	"Diona": "Cryo",
+	"Eula": "Cryo",
+	"Fischl": "Electro",
+	"Ganyu": "Cryo",
+	"Hu Tao": "Pyro",
+	"Jean": "Anemo",
+	"Kaedehara Kazuha": "Anemo",
+	"Kaeya": "Cryo",
+	"Kamisato Ayaka": "Cryo",
+	"Keqing": "Electro",
+	"Klee": "Pyro",
+	"Kujou Sara": "Electro",
+	"Lisa": "Electro",
+	"Mona": "Hydro",
+	"Ningguang": "Geo",
+	"Noelle": "Geo",
+	"Qiqi": "Cryo",
+	"Raiden Shogun": "Electro",
+	"Razor": "Electro",
+	"Rosaria": "Cryo",
+	"Sangonomiya Kokomi": "Hydro",
+	"Sayu": "Anemo",
+	"Sucrose": "Anemo",
+	"Tartaglia": "Hydro",
+	"Venti": "Anemo",
+	"Xiangling": "Pyro",
+	"Xiao": "Anemo",
+	"Xingqiu": "Hydro",
+	"Xinyan": "Pyro",
+	"Yanfei": "Pyro",
+	"Yoimiya": "Pyro",
+	"Zhongli": "Geo",
+}
 
 function bannerLookup(code, time){
 	return bannerCode[code];
@@ -197,6 +239,8 @@ function renderView(banner:keyof typeof bannerCode | null){
 		cells[4].textContent = pull["time"];
 		cells[3].classList.add(gachaItemTypeToCss[pull["item_type"]]);
 		cells[3].classList.add(gachaItemRarityToCss[pull["rank_type"]]);
+		const el = gachaCharToElement?.[pull["name"]];
+		if(el) cells[3].classList.add(el);
 		for(const c of cells){
 			row.append(c);
 		}
