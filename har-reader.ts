@@ -34,7 +34,7 @@ interface ApiResponseData {
 	size: string;
 	total: string;
 }
-interface Pull_s{
+export interface Pull_s{
 	count: string;
 	gacha_type: string;
 	id: string;

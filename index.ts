@@ -1,4 +1,4 @@
-import {readHar} from "./har-reader.js";
+import {Pull_s, readHar} from "./har-reader.js";
 
 const bannerCode = {
 	"100":"Beginners' Wish",
@@ -64,8 +64,42 @@ async function extractResponses(){
 	catch(e) {
 		results = readCsv(g.file);
 	}
-	g.gachaList = results;
-	g.gachaList.sort(sortFunction);
+	updateGachaList(results);
+}
+
+function updateGachaList(newPulls:Pull_s[]){
+	const prevCount = g.gachaList?.length || 0;
+	if(g.gachaList?.length){
+		if(newPulls?.[0]?.uid !== g.gachaList[0].uid){
+			console.warn(`input uid does not match current data stored ${newPulls?.[0]?.uid}/${g.gachaList[0].uid}`);
+			return;
+		}
+		for(let p of newPulls){
+			if (g.gachaList.find(e => e.id === p.id)){
+				continue;
+			}
+			g.gachaList.push(p);
+		}
+		g.gachaList.sort(sortFunction);
+	} else {
+		g.gachaList = newPulls;
+	}
+	console.log(`updated pull data with ${g.gachaList.length - prevCount}/${newPulls.length} additional pulls`);
+	let min = null;
+	let minTime = null;
+	let max = null;
+	let maxTime = null;
+	for(let p of newPulls){
+		if(min === null || min > p.id){
+			min = p.id;
+			minTime = p.time;
+		}
+		if(max === null || max < p.id){
+			max = p.id;
+			maxTime = p.time;
+		}
+	}
+	console.log(`added data ranging from ${minTime} to ${maxTime}`);
 }
 
 function displayTable(){
@@ -73,6 +107,9 @@ function displayTable(){
 	let tbody = document.createElement("tbody");
 	table.removeChild(table.children[1]);
 	table.append(tbody);
+	if(!g.gachaList?.length){
+		return;
+	}
 	for(let pull of g.gachaList){
 		const row = document.createElement("tr");
 		const cells = [
@@ -149,6 +186,14 @@ document.getElementById("filein").addEventListener("change",
 		}
 	}
 );
+
+document.getElementById("reset").onclick = function(){
+	g.file = null;
+	g.data = null;
+	g.status = "done";
+	g.gachaList = null;
+	displayTable();
+}
 
 document.getElementById("tocsv").onclick = function(){
 	if(g.gachaList?.length){
