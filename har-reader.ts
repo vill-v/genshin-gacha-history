@@ -3,7 +3,9 @@ import { Har } from "har-format";
 export function readHar(data:Har):Pull_s[]{
 	let entries = data.log.entries;
 	entries = entries.filter(e=>
-		e.request.url.startsWith("https://hk4e-api-os.mihoyo.com/event/gacha_info/api/getGachaLog")
+		( e.request.url.startsWith("https://hk4e-api-os.mihoyo.com/event/gacha_info/api/getGachaLog")
+		|| e.request.url.startsWith("https://hk4e-api-os.hoyoverse.com/event/gacha_info/api/getGachaLog")
+		)
 		&& e.response.status === 200
 	);
 	let responses = entries.map(e => JSON.parse(e.response.content.text));

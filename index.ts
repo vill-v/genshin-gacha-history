@@ -95,6 +95,7 @@ const gachaCharToElement = {
 	"Xinyan": "Pyro",
 	"Yae Miko": "Electro",
 	"Yanfei": "Pyro",
+	"Yelan": "Hydro",
 	"Yoimiya": "Pyro",
 	"Yun Jin": "Geo",
 	"Zhongli": "Geo",
@@ -307,15 +308,24 @@ function renderView(banner:keyof typeof bannerCode | null){
 		overview.append(pityCounter5);
 
 		const pullCounter = document.createElement("div");
-		const pullCounterLabel = document.createElement("span");
-		const pullCounterValue = document.createElement("span");
-		pullCounterLabel.classList.add("label");
-		pullCounterValue.classList.add("value");
-		pullCounterLabel.innerText = "Total banner pulls:";
-		pullCounterValue.innerText = String(count);
-		pullCounter.append(pullCounterLabel);
-		pullCounter.append(pullCounterValue);
+		pullCounter.innerHTML = `<div style="flex-direction: column; width: 100%">
+			<div style="display: flex;width: 100%;">
+			<span class="label">Total banner pulls:</span>
+			<span class="value">${String(count)}</span>
+			</div>
+			<div style="width: 100%;display: flex;">
+			<span class="label">Primogems spent:</span>
+			<span class="value">${String(count*160)}</span>
+			</div></div>`;
 		overview.append(pullCounter);
+
+		//placeholder until i have a better idea to fill gap, doesnt actually work
+		const tmp1 = document.createElement("div");
+		tmp1.innerHTML = "<label>Hide 3 stars</label><input type=\"checkbox\" \"=\"\">\n";
+		overview.append(tmp1);
+		const tmp2 = document.createElement("div");
+		tmp2.innerHTML = "<label>Hide 4 stars</label><input type=\"checkbox\" \"=\"\">\n";
+		overview.append(tmp2);
 
 
 		return overview;
@@ -475,7 +485,7 @@ document.getElementById("tocsv").onclick = function(){
 		].join(","));
 		let csv = data.join("\n");
 		(function download(filename, text) {
-			var element = document.createElement('a');
+			let element = document.createElement('a');
 			element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(text));
 			element.setAttribute('download', filename);
 			document.body.appendChild(element);
