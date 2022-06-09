@@ -11,17 +11,28 @@ let gachaList = null;
 //positive = ascending
 let columnOrder = [
 	{col:"gacha_type", asc:1},
+	{col:"time", asc:1},
 	{col:"item_type", asc:1},
 	{col:"rank_type", asc:-1},
-	{col:"time", asc:1},
 	{col:"name", asc:1},
 ];
 const comparators = {
-	"gacha_type":(a,b)=>a-b,
-	"item_type":(a,b)=>a.localeCompare(b),
-	"name":(a,b)=>a.localeCompare(b),
-	"rank_type":(a,b)=>a-b,
-	"time":(a,b)=>a.localeCompare(b),
+	"gacha_type":(a,b)=>a["gacha_type"]-b["gacha_type"],
+	"item_type":(a,b)=>a["item_type"].localeCompare(b["item_type"]),
+	"name":(a,b)=>a["name"].localeCompare(b["name"]),
+	"rank_type":(a,b)=>a["rank_type"]-b["rank_type"],
+	//because timestamp does not distinguish order within a 10 pull,
+	//sort by internal id instead
+	//dev note: consider stripping out id and replacing with order of pulls instead
+	//that would require additional work to show absolute order across banners (sort by both timestamp and order)
+	"time":(a,b)=>a["id"]-b["id"],
+}
+const columnNameToInternal = {
+	"Banner":"gacha_type",
+	"Type":"item_type",
+	"Name":"name",
+	"Rarity":"rank_type",
+	"Time":"time",
 }
 
 function bannerLookup(code, time){
@@ -55,6 +66,7 @@ async function extractResponses(){
 	responses.map(e => e.data.list)
 		.forEach(list => list.forEach(addWithDedupe));
 	gachaList = results;
+	gachaList.sort(sortFunction);
 
 	function addWithDedupe(item){
 		if(ids.has(item.id)) return;
@@ -64,8 +76,6 @@ async function extractResponses(){
 }
 
 function displayTable(){
-	gachaList.sort(sortFunction);
-
 	const table = document.getElementById("table");
 	let tbody = document.createElement("tbody");
 	table.removeChild(table.children[1]);
@@ -110,13 +120,24 @@ function displayTable(){
 function sortFunction(a,b){
 	let comparison = 0;
 	for(const rule of columnOrder){
-		const f = comparators[rule.col];
-		const aa = a[rule.col];
-		const bb = b[rule.col];
-		comparison = f(aa,bb) * rule.asc;
+		comparison = comparators[rule.col](a,b) * rule.asc;
 		if(comparison !== 0) break;
 	}
 	return comparison;
+}
+
+function reorderCols(col){
+	let asc = 1;
+	for(let i = 0; i < columnOrder.length; i++){
+		if(columnOrder[i].col === col){
+			asc = columnOrder[i].asc * -1;
+			columnOrder.splice(i,1);
+			break;
+		}
+	}
+	columnOrder.unshift({"col": col, "asc": asc});
+	gachaList.sort(sortFunction);
+	displayTable();
 }
 
 document.getElementById("filein").addEventListener("change",
@@ -134,3 +155,10 @@ document.getElementById("filein").addEventListener("change",
 		}
 	}
 );
+
+for(const columnHeader of document.getElementById("table_header").children){
+	columnHeader.addEventListener("click",function(){
+		if(gachaList === null) return;
+		reorderCols(columnNameToInternal[this.textContent]);
+	});
+}
