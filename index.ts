@@ -40,6 +40,15 @@ const columnNameToInternal = {
 	"Rarity":"rank_type",
 	"Time":"time",
 }
+const gachaItemTypeToCss = {
+	"Character":"ch",
+	"Weapon":"wp"
+}
+const gachaItemRarityToCss = {
+	"3":"r3",
+	"4":"r4",
+	"5":"r5",
+}
 
 function bannerLookup(code, time){
 	return bannerCode[code];
@@ -147,6 +156,77 @@ function displayTable(){
 	}
 }
 
+function renderView(banner:keyof typeof bannerCode | null){
+	if(banner === null){
+		document.getElementById("banner-100").innerHTML = "";
+		document.getElementById("banner-200").innerHTML = "";
+		document.getElementById("banner-301").innerHTML = "";
+		document.getElementById("banner-302").innerHTML = "";
+		document.getElementById("view").classList.add("hide");
+		return;
+	}
+	if(!g.gachaList?.length){
+		console.warn("no data to render");
+		return;
+	}
+	// const bannerName = bannerCode[banner];
+	const data:Pull_s[] = g.gachaList.filter(e => e.gacha_type === banner).sort(
+		(a,b)=>Number(BigInt(a.id)-BigInt(b.id)));
+	const table = prepareTable("Count","Pity4","Pity5","Item","Date");
+	let tbody = document.createElement("tbody");
+	table.append(tbody);
+	let count = 0;
+	let pity4 = 0;
+	let pity5 = 0;
+	for(let pull of data){
+		count++;
+		pity4++;
+		pity5++;
+		const row = document.createElement("tr");
+		const cells = [
+			document.createElement("td"),
+			document.createElement("td"),
+			document.createElement("td"),
+			document.createElement("td"),
+			document.createElement("td"),
+		];
+		cells[0].textContent = ""+count;
+		cells[1].textContent = ""+pity4;
+		cells[2].textContent = ""+pity5;
+		cells[3].textContent = pull["name"];
+		cells[4].textContent = pull["time"];
+		cells[3].classList.add(gachaItemTypeToCss[pull["item_type"]]);
+		cells[3].classList.add(gachaItemRarityToCss[pull["rank_type"]]);
+		for(const c of cells){
+			row.append(c);
+		}
+		tbody.append(row);
+		if(pull["rank_type"] === "4"){
+			pity4 = 0;
+		}
+		if(pull["rank_type"] === "5"){
+			pity5 = 0;
+		}
+	}
+	const container = document.getElementById("banner-"+banner);
+	container.innerHTML = "";
+	container.append(table);
+}
+
+function prepareTable(...headers:string[]){
+	const table = document.createElement("table");
+	const thead = document.createElement("thead");
+	const hrow = document.createElement("tr");
+	for(const e of headers){
+		const th = document.createElement("th");
+		th.textContent = e;
+		hrow.append(th);
+	}
+	thead.append(hrow);
+	table.append(thead);
+	return table;
+}
+
 function sortFunction(a,b){
 	let comparison = 0;
 	for(const rule of columnOrder){
@@ -193,6 +273,7 @@ document.getElementById("reset").onclick = function(){
 	g.status = "done";
 	g.gachaList = null;
 	displayTable();
+	renderView(null);
 }
 
 document.getElementById("tocsv").onclick = function(){
@@ -220,6 +301,45 @@ document.getElementById("tocsv").onclick = function(){
 		})("out.csv", csv);
 	}
 };
+
+document.getElementById("view-formatted").onclick = function(){
+	document.getElementById("view").classList.remove("hide");
+	document.getElementById("raw").classList.add("hide");
+}
+document.getElementById("view-raw").onclick = function(){
+	document.getElementById("view").classList.add("hide");
+	document.getElementById("raw").classList.remove("hide");
+}
+
+document.getElementById("banner-tab-100").onclick = function(){
+	for(const e of document.getElementById("banner-content").children){
+		e.classList.add("hide");
+	}
+	renderView("100");
+	document.getElementById("banner-100").classList.remove("hide");
+}
+document.getElementById("banner-tab-200").onclick = function(){
+	for(const e of document.getElementById("banner-content").children){
+		e.classList.add("hide");
+	}
+	renderView("200");
+	document.getElementById("banner-200").classList.remove("hide");
+}
+document.getElementById("banner-tab-301").onclick = function(){
+	for(const e of document.getElementById("banner-content").children){
+		e.classList.add("hide");
+	}
+	renderView("301");
+	document.getElementById("banner-301").classList.remove("hide");
+}
+document.getElementById("banner-tab-302").onclick = function(){
+	for(const e of document.getElementById("banner-content").children){
+		e.classList.add("hide");
+	}
+	renderView("302");
+	document.getElementById("banner-302").classList.remove("hide");
+}
+
 
 for(const columnHeader of document.getElementById("table_header").children){
 	columnHeader.addEventListener("click",function(){

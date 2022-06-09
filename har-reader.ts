@@ -49,7 +49,7 @@ export interface Pull_s{
 interface Pull_d{
 	count: number;
 	gacha_type: string;
-	id: number;
+	id: bigint;
 	item_id: string;
 	item_type: string;
 	lang: string;

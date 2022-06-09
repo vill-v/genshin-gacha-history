@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Genshin Gacha Log</title>
+	<link rel="stylesheet" href="index.css">
 	<script type="module" defer src="index.js"></script>
 </head>
 <body>
@@ -12,6 +13,24 @@
 	<button id="tocsv">Download CSV</button>
 </div>
 <div>
+	<button id="view-raw">Raw</button>
+	<button id="view-formatted">View</button>
+</div>
+<div id="view" class="hide">
+	<div id="banner-tabs">
+		<button id="banner-tab-100">Beginners' Wish</button>
+		<button id="banner-tab-200">Wanderlust Invocation</button>
+		<button id="banner-tab-301">Character Event Wish</button>
+		<button id="banner-tab-302">Epitome Invocation</button>
+	</div>
+	<div id="banner-content">
+		<div id="banner-100" class="hide">No data</div>
+		<div id="banner-200" class="hide">No data</div>
+		<div id="banner-301" class="hide">No data</div>
+		<div id="banner-302" class="hide">No data</div>
+	</div>
+</div>
+<div id="raw" class="hide">
 	<table id="table">
 		<thead>
 		<tr id="table_header">

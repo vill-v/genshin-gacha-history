@@ -1,0 +1,18 @@
+.hide{
+    display: none;
+}
+.r3{
+    color: dodgerblue;
+}
+.r4{
+    color: blueviolet;
+}
+.r5{
+    color: goldenrod;
+}
+.ch::before{
+    content:"c";
+}
+.wp::before{
+    content:"w";
+}
