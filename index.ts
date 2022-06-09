@@ -1,12 +1,17 @@
+import {read} from "./har-reader.js";
+
 const bannerCode = {
 	"100":"Beginners' Wish",
 	"200":"Wanderlust Invocation",
 	"301":"Character Event Wish",
 	"302":"Epitome Invocation",
 };
-let data = null;
-let status = "done";
-let gachaList = null;
+const g:any = {};
+// @ts-ignore
+window.globals = g;
+g.data = null;
+g.status = "done";
+g.gachaList = null;
 //order from most to least significant
 //positive = ascending
 let columnOrder = [
@@ -43,7 +48,7 @@ function bannerLookup(code, time){
 async function readFile(file){
 	let t = await file.text();
 	try{
-		data = JSON.parse(t);
+		g.data = JSON.parse(t);
 	}
 	catch(e){
 		console.error(e);
@@ -54,25 +59,10 @@ async function readFile(file){
 }
 
 async function extractResponses(){
-	if(!data) return;
-	let requests = data.log.entries;
-	requests = requests.filter(e=>
-		e.request.url.startsWith("https://hk4e-api-os.mihoyo.com/event/gacha_info/api/getGachaLog")
-		&& e.response.status === 200
-	);
-	let responses = requests.map(e => JSON.parse(e.response.content.text));
-	let results = [];
-	let ids = new Set();
-	responses.map(e => e.data.list)
-		.forEach(list => list.forEach(addWithDedupe));
-	gachaList = results;
-	gachaList.sort(sortFunction);
-
-	function addWithDedupe(item){
-		if(ids.has(item.id)) return;
-		ids.add(item.id);
-		results.push(item);
-	}
+	if(!g.data) return;
+	let results = read(g.data);
+	g.gachaList = results;
+	g.gachaList.sort(sortFunction);
 }
 
 function displayTable(){
@@ -80,7 +70,7 @@ function displayTable(){
 	let tbody = document.createElement("tbody");
 	table.removeChild(table.children[1]);
 	table.append(tbody);
-	for(let pull of gachaList){
+	for(let pull of g.gachaList){
 		const row = document.createElement("tr");
 		const cells = [
 			document.createElement("td"),
@@ -136,13 +126,13 @@ function reorderCols(col){
 		}
 	}
 	columnOrder.unshift({"col": col, "asc": asc});
-	gachaList.sort(sortFunction);
+	g.gachaList.sort(sortFunction);
 	displayTable();
 }
 
 document.getElementById("filein").addEventListener("change",
 	function(){
-		const files = this.files;
+		const files = (this as HTMLInputElement).files;
 		if(files.length){
 			if(status === "loading"){
 				console.log("not done");
@@ -158,7 +148,7 @@ document.getElementById("filein").addEventListener("change",
 
 for(const columnHeader of document.getElementById("table_header").children){
 	columnHeader.addEventListener("click",function(){
-		if(gachaList === null) return;
+		if(g.gachaList === null) return;
 		reorderCols(columnNameToInternal[this.textContent]);
 	});
 }
