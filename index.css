@@ -1,5 +1,5 @@
 .hide{
-    display: none;
+    display: none !important;
 }
 .r3{
     color: dodgerblue;
@@ -100,7 +100,10 @@
     border-style: solid;
     border-color: gainsboro;
     background-color: antiquewhite;
-    width: 800px;
+    width: 900px;
+    font-family: "Default_SC 85w", sans-serif;
+    font-size: 14px;
+    line-height: 1.15;
 }
 
 #banner-tabs{
@@ -147,6 +150,43 @@
     background-color: navajowhite;
 }
 #banner-content > div{
+    display: grid;
+    grid-template-columns: 70fr 5px 30fr;
+}
+.separator{
+    width: 5px;
+    height: 100%;
+    background-color: green;
+    cursor: col-resize;
+}
+.banner-table{
     height: 500px;
     overflow-y: scroll;
+}
+.banner-overview{
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-row-gap: 5px;
+    background-color: gainsboro;
+    font-size: 20px;
+}
+.banner-overview > div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border: 5px solid steelblue;
+    border-radius: 10px;
+}
+.banner-overview .label{
+    flex: auto;
+}
+.banner-overview .value{
+    flex: initial;
+}
+.banner-overview .value.guarantee::after{
+    content: "G";
+    font-size: 20px;
+    color: #ee0;
+    font-weight: bold;
 }

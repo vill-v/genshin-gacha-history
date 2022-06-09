@@ -265,9 +265,61 @@ function renderView(banner:keyof typeof bannerCode | null){
 	}
 	const container = document.getElementById("banner-"+banner);
 	container.innerHTML = "";
-	container.append(table);
+
+	const tableWrapper = document.createElement("div");
+	tableWrapper.classList.add("banner-table");
+	tableWrapper.append(table);
+	container.append(tableWrapper);
+
+	const separator = document.createElement("div");
+	separator.classList.add("separator");
+	container.append(separator);
+
+	container.append(makeOverview(pity4, pity5, count));
+
 	applyViewFilters();
 	colorPity(tbody,1,2,banner);
+
+	function makeOverview(pity4, pity5, count){
+		const overview = document.createElement("div");
+		overview.classList.add("banner-overview");
+
+		const pityCounter4 = document.createElement("div");
+		const pityCounter4Label = document.createElement("span");
+		const pityCounter4Value = document.createElement("span");
+		pityCounter4Label.classList.add("label");
+		pityCounter4Value.classList.add("value");
+		pityCounter4Label.innerText = "Current 4 Star pity:";
+		pityCounter4Value.innerText = String(pity4);
+		pityCounter4.append(pityCounter4Label);
+		pityCounter4.append(pityCounter4Value);
+		overview.append(pityCounter4);
+
+		const pityCounter5 = document.createElement("div");
+		const pityCounter5Label = document.createElement("span");
+		const pityCounter5Value = document.createElement("span");
+		pityCounter5Label.classList.add("label");
+		pityCounter5Value.classList.add("value");
+		pityCounter5Label.innerText = "Current 5 Star pity:";
+		pityCounter5Value.innerText = String(pity5);
+		pityCounter5.append(pityCounter5Label);
+		pityCounter5.append(pityCounter5Value);
+		overview.append(pityCounter5);
+
+		const pullCounter = document.createElement("div");
+		const pullCounterLabel = document.createElement("span");
+		const pullCounterValue = document.createElement("span");
+		pullCounterLabel.classList.add("label");
+		pullCounterValue.classList.add("value");
+		pullCounterLabel.innerText = "Total banner pulls:";
+		pullCounterValue.innerText = String(count);
+		pullCounter.append(pullCounterLabel);
+		pullCounter.append(pullCounterValue);
+		overview.append(pullCounter);
+
+
+		return overview;
+	}
 }
 
 function applyViewFilters(){
