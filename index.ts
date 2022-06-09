@@ -31,7 +31,7 @@ const comparators = {
 	//sort by internal id instead
 	//dev note: consider stripping out id and replacing with order of pulls instead
 	//that would require additional work to show absolute order across banners (sort by both timestamp and order)
-	"time":(a,b)=>a["id"]-b["id"],
+	"time":(a,b)=>Number(BigInt(a.id)-BigInt(b.id)),
 }
 const columnNameToInternal = {
 	"Banner":"gacha_type",
@@ -256,6 +256,7 @@ function renderView(banner:keyof typeof bannerCode | null){
 	container.innerHTML = "";
 	container.append(table);
 	applyViewFilters();
+	colorPity(tbody,1,2,banner);
 }
 
 function applyViewFilters(){
@@ -277,6 +278,45 @@ function applyViewFilters(){
 		for(const e of fourStars){
 			e.parentElement.classList.add("hide");
 		}
+	}
+}
+
+function colorPity(tbody:HTMLTableSectionElement, col4:number, col5:number, banner:keyof typeof bannerCode){
+	const rows = tbody.children;
+	for(const r of rows){
+		const pity4 = r.children[col4];
+		const pity5 = r.children[col5];
+		pity4.classList.value = "";
+		pity5.classList.value = "";
+		pity4.classList.add(pity4star(Number(pity4.textContent)));
+		switch(banner) {
+			case "100":
+				pity5.classList.add("pity-low");
+				break;
+			case "200":
+			case "301":
+				pity5.classList.add(pity90(Number(pity5.textContent)))
+				break;
+			case "302":
+				pity5.classList.add(pity80(Number(pity5.textContent)))
+				break;
+		}
+	}
+	function pity4star(pity:number){
+		if(pity < 9) return "pity-low";
+		if(pity === 9) return "pity-med";
+		if(pity === 10) return "pity-high";
+		else return "pity-max";
+	}
+	function pity90(pity:number){
+		if(pity < 74) return "pity-low";
+		if(pity < 86) return "pity-"+(pity-73);
+		else return "pity-max";
+	}
+	function pity80(pity:number){
+		if(pity < 63) return "pity-low";
+		if(pity < 75) return "pity-"+(pity-62);
+		else return "pity-max";
 	}
 }
 

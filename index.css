@@ -42,6 +42,55 @@
     top: 5px;
 }
 
+.pity-low{
+    color: #0f0;
+}
+.pity-med{
+    color: #ff0;
+}
+.pity-high{
+    color: #f00;
+}
+.pity-max{
+    color: #a0a;
+}
+.pity-1{
+    color: #cf0;
+}
+.pity-2{
+    color: #ff0;
+}
+.pity-3{
+    color: #fd0;
+}
+.pity-4{
+    color: #fb0;
+}
+.pity-5{
+    color: #f90;
+}
+.pity-6{
+    color: #f70;
+}
+.pity-7{
+    color: #f50;
+}
+.pity-8{
+    color: #f30;
+}
+.pity-9{
+    color: #f10;
+}
+.pity-10{
+    color: #e00;
+}
+.pity-11{
+    color: #c00;
+}
+.pity-12{
+    color: #c00;
+}
+
 #view {
     overflow: hidden;
     border-width: 2px 2px 0 2px;
