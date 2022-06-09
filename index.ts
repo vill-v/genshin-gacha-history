@@ -211,6 +211,29 @@ function renderView(banner:keyof typeof bannerCode | null){
 	const container = document.getElementById("banner-"+banner);
 	container.innerHTML = "";
 	container.append(table);
+	applyViewFilters();
+}
+
+function applyViewFilters(){
+	const visibleView = [...document.getElementById("banner-content").children].filter(e => !e.classList.contains("hide"));
+	if(!visibleView.length){
+		return;
+	}
+	const currentView = visibleView[0];
+	//show all rows
+	currentView.querySelectorAll("tbody > tr").forEach(e=>e.classList.remove("hide"));
+	const threeStars = currentView.querySelectorAll("tbody td.r3");
+	const fourStars = currentView.querySelectorAll("tbody td.r4");
+	if((document.getElementById("hide-3s") as HTMLInputElement).checked){
+		for(const e of threeStars){
+			e.parentElement.classList.add("hide");
+		}
+	}
+	if((document.getElementById("hide-4s") as HTMLInputElement).checked){
+		for(const e of fourStars){
+			e.parentElement.classList.add("hide");
+		}
+	}
 }
 
 function prepareTable(...headers:string[]){
@@ -267,6 +290,14 @@ document.getElementById("filein").addEventListener("change",
 	}
 );
 
+document.getElementById("hide-3s").addEventListener("change",function(){
+	applyViewFilters();
+});
+
+document.getElementById("hide-4s").addEventListener("change",function(){
+	applyViewFilters();
+});
+
 document.getElementById("reset").onclick = function(){
 	g.file = null;
 	g.data = null;
@@ -315,29 +346,29 @@ document.getElementById("banner-tab-100").onclick = function(){
 	for(const e of document.getElementById("banner-content").children){
 		e.classList.add("hide");
 	}
-	renderView("100");
 	document.getElementById("banner-100").classList.remove("hide");
+	renderView("100");
 }
 document.getElementById("banner-tab-200").onclick = function(){
 	for(const e of document.getElementById("banner-content").children){
 		e.classList.add("hide");
 	}
-	renderView("200");
 	document.getElementById("banner-200").classList.remove("hide");
+	renderView("200");
 }
 document.getElementById("banner-tab-301").onclick = function(){
 	for(const e of document.getElementById("banner-content").children){
 		e.classList.add("hide");
 	}
-	renderView("301");
 	document.getElementById("banner-301").classList.remove("hide");
+	renderView("301");
 }
 document.getElementById("banner-tab-302").onclick = function(){
 	for(const e of document.getElementById("banner-content").children){
 		e.classList.add("hide");
 	}
-	renderView("302");
 	document.getElementById("banner-302").classList.remove("hide");
+	renderView("302");
 }
 
 
