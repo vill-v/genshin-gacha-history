@@ -1,4 +1,4 @@
-import {read} from "./har-reader.js";
+import {readHar} from "./har-reader.js";
 
 const bannerCode = {
 	"100":"Beginners' Wish",
@@ -9,6 +9,7 @@ const bannerCode = {
 const g:any = {};
 // @ts-ignore
 window.globals = g;
+g.file = null;
 g.data = null;
 g.status = "done";
 g.gachaList = null;
@@ -46,21 +47,23 @@ function bannerLookup(code, time){
 }
 
 async function readFile(file){
-	let t = await file.text();
-	try{
-		g.data = JSON.parse(t);
-	}
-	catch(e){
-		console.error(e);
-	}
-	finally {
-		status = "done";
-	}
+	g.file = await file.text();
+	g.status = "done";
 }
 
 async function extractResponses(){
-	if(!g.data) return;
-	let results = read(g.data);
+	if(!g.file) return;
+	let results;
+	try{
+		const json = JSON.parse(g.file);
+		if(json?.log?.entries){
+			results = readHar(json);
+		}
+		else throw new Error();
+	}
+	catch(e) {
+		results = readCsv(g.file);
+	}
 	g.gachaList = results;
 	g.gachaList.sort(sortFunction);
 }
@@ -134,21 +137,65 @@ document.getElementById("filein").addEventListener("change",
 	function(){
 		const files = (this as HTMLInputElement).files;
 		if(files.length){
-			if(status === "loading"){
+			if(g.status === "loading"){
 				console.log("not done");
 				return;
 			}
-			status = "loading";
+			g.status = "loading";
 			readFile(files[0])
 				.then(()=>extractResponses())
-				.then(()=>displayTable());
+				.then(()=>displayTable())
+				.catch(err => console.error(err));
 		}
 	}
 );
+
+document.getElementById("tocsv").onclick = function(){
+	if(g.gachaList?.length){
+		let data = g.gachaList.map(e => [
+			e.count,
+			e.gacha_type,
+			e.id,
+			e.item_id,
+			e.item_type,
+			e.lang,
+			e.name,
+			e.rank_type,
+			e.time,
+			e.uid,
+		].join(","));
+		let csv = data.join("\n");
+		(function download(filename, text) {
+			var element = document.createElement('a');
+			element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(text));
+			element.setAttribute('download', filename);
+			document.body.appendChild(element);
+			element.click();
+			document.body.removeChild(element);
+		})("out.csv", csv);
+	}
+};
 
 for(const columnHeader of document.getElementById("table_header").children){
 	columnHeader.addEventListener("click",function(){
 		if(g.gachaList === null) return;
 		reorderCols(columnNameToInternal[this.textContent]);
 	});
+}
+
+function readCsv(txt:string){
+	const rows = txt.split("\n");
+	const data = rows.map(e => e.split(","));
+	return data.map(e => ({
+		count: e[0],
+		gacha_type: e[1],
+		id: e[2],
+		item_id: e[3],
+		item_type: e[4],
+		lang: e[5],
+		name: e[6],
+		rank_type: e[7],
+		time: e[8],
+		uid: e[9],
+	}));
 }

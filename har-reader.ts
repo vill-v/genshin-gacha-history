@@ -1,6 +1,6 @@
 import { Har } from "har-format";
 
-export function read(data:Har):Pull_s[]{
+export function readHar(data:Har):Pull_s[]{
 	let entries = data.log.entries;
 	entries = entries.filter(e=>
 		e.request.url.startsWith("https://hk4e-api-os.mihoyo.com/event/gacha_info/api/getGachaLog")
