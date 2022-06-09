@@ -16,3 +16,49 @@
 .wp::before{
     content:"w";
 }
+
+#view {
+    overflow: hidden;
+    border-width: 2px 2px 0 2px;
+    border-style: solid;
+    border-color: gainsboro;
+    background-color: antiquewhite;
+}
+
+#banner-tabs{
+    display: flex;
+    flex-direction: row;
+}
+
+#banner-tabs button {
+    background-color: gainsboro;
+    border-width: 2px 2px 0 2px;
+    border-radius: 20px 20px 0 0;
+    border-style: solid;
+    border-color: dimgrey;
+    border-collapse: collapse;
+    outline: none;
+    cursor: pointer;
+    padding: 15px;
+    transition: 0.3s;
+    font-size: 16px;
+}
+
+#banner-tabs button:hover {
+    background-color: burlywood;
+}
+
+#banner-tabs .tab-selected {
+    background-color: burlywood;
+}
+
+#banner-content {
+    background-color: gainsboro;
+    border-width: 1px 2px 2px 2px;
+    border-style: solid;
+    border-color: dimgrey;
+    border-collapse: collapse;
+}
+#banner-content tbody tr:hover{
+    background-color: navajowhite;
+}

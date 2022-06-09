@@ -342,31 +342,36 @@ document.getElementById("view-raw").onclick = function(){
 	document.getElementById("raw").classList.remove("hide");
 }
 
-document.getElementById("banner-tab-100").onclick = function(){
+function resetTabVisibility(){
+	for(const e of document.getElementsByClassName("tab-selected")){
+		e.classList.remove("tab-selected");
+	}
 	for(const e of document.getElementById("banner-content").children){
 		e.classList.add("hide");
 	}
+}
+
+document.getElementById("banner-tab-100").onclick = function(){
+	resetTabVisibility();
+	document.getElementById("banner-tab-100").classList.add("tab-selected");
 	document.getElementById("banner-100").classList.remove("hide");
 	renderView("100");
 }
 document.getElementById("banner-tab-200").onclick = function(){
-	for(const e of document.getElementById("banner-content").children){
-		e.classList.add("hide");
-	}
+	resetTabVisibility();
+	document.getElementById("banner-tab-200").classList.add("tab-selected");
 	document.getElementById("banner-200").classList.remove("hide");
 	renderView("200");
 }
 document.getElementById("banner-tab-301").onclick = function(){
-	for(const e of document.getElementById("banner-content").children){
-		e.classList.add("hide");
-	}
+	resetTabVisibility();
+	document.getElementById("banner-tab-301").classList.add("tab-selected");
 	document.getElementById("banner-301").classList.remove("hide");
 	renderView("301");
 }
 document.getElementById("banner-tab-302").onclick = function(){
-	for(const e of document.getElementById("banner-content").children){
-		e.classList.add("hide");
-	}
+	resetTabVisibility();
+	document.getElementById("banner-tab-302").classList.add("tab-selected");
 	document.getElementById("banner-302").classList.remove("hide");
 	renderView("302");
 }
