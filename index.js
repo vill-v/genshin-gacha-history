@@ -35,9 +35,16 @@ async function extractResponses(){
 	);
 	let responses = requests.map(e => JSON.parse(e.response.content.text));
 	let results = [];
+	let ids = new Set();
 	responses.map(e => e.data.list)
-		.forEach(list => list.forEach(e =>results.push(e)));
+		.forEach(list => list.forEach(addWithDedupe));
 	gachaList = results;
+
+	function addWithDedupe(item){
+		if(ids.has(item.id)) return;
+		ids.add(item.id);
+		results.push(item);
+	}
 }
 
 function viewData(){
