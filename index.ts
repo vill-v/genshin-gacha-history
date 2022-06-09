@@ -5,6 +5,7 @@ const bannerCode = {
 	"200":"Wanderlust Invocation",
 	"301":"Character Event Wish",
 	"302":"Epitome Invocation",
+	"400":"Character Event Wish 2",
 };
 const g:any = {};
 // @ts-ignore
@@ -53,6 +54,7 @@ const gachaCharToElement = {
 	"Albedo": "Geo",
 	"Aloy": "Cryo",
 	"Amber": "Pyro",
+	"Arataki Itto": "Geo",
 	"Barbara": "Hydro",
 	"Beidou": "Electro",
 	"Bennett": "Pyro",
@@ -62,11 +64,13 @@ const gachaCharToElement = {
 	"Eula": "Cryo",
 	"Fischl": "Electro",
 	"Ganyu": "Cryo",
+	"Gorou": "Geo",
 	"Hu Tao": "Pyro",
 	"Jean": "Anemo",
 	"Kaedehara Kazuha": "Anemo",
 	"Kaeya": "Cryo",
 	"Kamisato Ayaka": "Cryo",
+	"Kamisato Ayato": "Hydro",
 	"Keqing": "Electro",
 	"Klee": "Pyro",
 	"Kujou Sara": "Electro",
@@ -80,15 +84,19 @@ const gachaCharToElement = {
 	"Rosaria": "Cryo",
 	"Sangonomiya Kokomi": "Hydro",
 	"Sayu": "Anemo",
+	"Shenhe": "Cryo",
 	"Sucrose": "Anemo",
 	"Tartaglia": "Hydro",
+	"Thoma": "Pyro",
 	"Venti": "Anemo",
 	"Xiangling": "Pyro",
 	"Xiao": "Anemo",
 	"Xingqiu": "Hydro",
 	"Xinyan": "Pyro",
+	"Yae Miko": "Electro",
 	"Yanfei": "Pyro",
 	"Yoimiya": "Pyro",
+	"Yun Jin": "Geo",
 	"Zhongli": "Geo",
 }
 
@@ -212,7 +220,10 @@ function renderView(banner:keyof typeof bannerCode | null){
 		return;
 	}
 	// const bannerName = bannerCode[banner];
-	const data:Pull_s[] = g.gachaList.filter(e => e.gacha_type === banner).sort(
+	const filterFunc = banner === "301"
+		? e => e.gacha_type === "301" || e.gacha_type === "400"
+		: e => e.gacha_type === banner;
+	const data:Pull_s[] = g.gachaList.filter(filterFunc).sort(
 		(a,b)=>Number(BigInt(a.id)-BigInt(b.id)));
 	const table = prepareTable("Count","Pity4","Pity5","Item","Date");
 	let tbody = document.createElement("tbody");
@@ -288,18 +299,23 @@ function colorPity(tbody:HTMLTableSectionElement, col4:number, col5:number, bann
 		const pity5 = r.children[col5];
 		pity4.classList.value = "";
 		pity5.classList.value = "";
-		pity4.classList.add(pity4star(Number(pity4.textContent)));
-		switch(banner) {
-			case "100":
-				pity5.classList.add("pity-low");
-				break;
-			case "200":
-			case "301":
-				pity5.classList.add(pity90(Number(pity5.textContent)))
-				break;
-			case "302":
-				pity5.classList.add(pity80(Number(pity5.textContent)))
-				break;
+		if(r.querySelector(".r4")){
+			pity4.classList.add(pity4star(Number(pity4.textContent)));
+		}
+		if(r.querySelector(".r5")){
+			switch(banner) {
+				case "100":
+					pity5.classList.add("pity-low");
+					break;
+				case "200":
+				case "301":
+				case "400":
+					pity5.classList.add(pity90(Number(pity5.textContent)))
+					break;
+				case "302":
+					pity5.classList.add(pity80(Number(pity5.textContent)))
+					break;
+			}
 		}
 	}
 	function pity4star(pity:number){

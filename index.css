@@ -42,6 +42,9 @@
     top: 5px;
 }
 
+[class^="pity-"]{
+    font-weight: bold;
+}
 .pity-low{
     color: #0f0;
 }
@@ -97,6 +100,7 @@
     border-style: solid;
     border-color: gainsboro;
     background-color: antiquewhite;
+    width: 800px;
 }
 
 #banner-tabs{
@@ -133,6 +137,16 @@
     border-color: dimgrey;
     border-collapse: collapse;
 }
+#banner-content thead{
+    position: sticky;
+    top:0;
+    background-color: gainsboro;
+    z-index: 1;
+}
 #banner-content tbody tr:hover{
     background-color: navajowhite;
+}
+#banner-content > div{
+    height: 500px;
+    overflow-y: scroll;
 }
