@@ -7,51 +7,53 @@
 	<script type="module" defer src="index.js"></script>
 </head>
 <body>
-<div>
-	<input id="filein" type="file" name="upload">
-	<button id="reset">Reset</button>
-	<button id="tocsv">Download CSV</button>
-</div>
-<div>
-	<button id="view-raw">Raw</button>
-	<button id="view-formatted">View</button>
-</div>
-<div id="view" class="hide">
-	<div>
-		<label for="hide-3s">Hide 3 stars</label><input type="checkbox" id="hide-3s">
-		<label for="hide-4s">Hide 4 stars</label><input type="checkbox" id="hide-4s">
+<div class="outer-container">
+	<div id="account">
+		<input id="filein" type="file" name="upload">
+		<button id="reset">Reset</button>
+		<button id="tocsv">Download CSV</button>
+		<div>
+			<button id="view-raw">Raw</button>
+			<button id="view-formatted">View</button>
+		</div>
 	</div>
-	<div id="banner-tabs">
-		<button id="banner-tab-100">Beginners' Wish</button>
-		<button id="banner-tab-200">Wanderlust Invocation</button>
-		<button id="banner-tab-301">Character Event Wish</button>
-		<button id="banner-tab-302">Epitome Invocation</button>
+	<div id="view" class="hide">
+		<div id="banner-tabs">
+			<button id="banner-tab-100">Beginners' Wish</button>
+			<button id="banner-tab-200">Wanderlust Invocation</button>
+			<button id="banner-tab-301">Character Event Wish</button>
+			<button id="banner-tab-302">Epitome Invocation</button>
+		</div>
+		<div id="banner-content">
+			<div id="banner-100" class="hide">No data</div>
+			<div id="banner-200" class="hide">No data</div>
+			<div id="banner-301" class="hide">No data</div>
+			<div id="banner-302" class="hide">No data</div>
+		</div>
+		<div>
+			<label for="hide-3s">Hide 3 stars</label><input type="checkbox" id="hide-3s">
+			<label for="hide-4s">Hide 4 stars</label><input type="checkbox" id="hide-4s">
+		</div>
 	</div>
-	<div id="banner-content">
-		<div id="banner-100" class="hide">No data</div>
-		<div id="banner-200" class="hide">No data</div>
-		<div id="banner-301" class="hide">No data</div>
-		<div id="banner-302" class="hide">No data</div>
+	<div id="raw" class="hide">
+		<table id="table">
+			<thead>
+			<tr id="table_header">
+				<!--			<th>count</th>-->
+				<th>Banner</th>
+				<!--			<th>id</th>-->
+				<!--			<th>item_id</th>-->
+				<th>Type</th>
+				<!--			<th>lang</th>-->
+				<th>Name</th>
+				<th>Rarity</th>
+				<th>Time</th>
+				<!--			<th>uid</th>-->
+			</tr>
+			</thead>
+			<tbody id="tbody"></tbody>
+		</table>
 	</div>
-</div>
-<div id="raw" class="hide">
-	<table id="table">
-		<thead>
-		<tr id="table_header">
-<!--			<th>count</th>-->
-			<th>Banner</th>
-<!--			<th>id</th>-->
-<!--			<th>item_id</th>-->
-			<th>Type</th>
-<!--			<th>lang</th>-->
-			<th>Name</th>
-			<th>Rarity</th>
-			<th>Time</th>
-<!--			<th>uid</th>-->
-		</tr>
-		</thead>
-		<tbody id="tbody"></tbody>
-	</table>
 </div>
 </body>
 </html>

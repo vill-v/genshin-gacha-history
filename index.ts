@@ -272,18 +272,17 @@ function renderView(banner:keyof typeof bannerCode | null){
 	tableWrapper.append(table);
 	container.append(tableWrapper);
 
-	const separator = document.createElement("div");
-	separator.classList.add("separator");
-	container.append(separator);
+	// const separator = document.createElement("div");
+	// separator.classList.add("separator");
+	// container.append(separator);
 
-	container.append(makeOverview(pity4, pity5, count));
+	container.append(...makeOverview(pity4, pity5, count));
 
 	applyViewFilters();
 	colorPity(tbody,1,2,banner);
 
-	function makeOverview(pity4, pity5, count){
-		const overview = document.createElement("div");
-		overview.classList.add("banner-overview");
+	function makeOverview(pity4, pity5, count):HTMLElement[]{
+		const overview = [];
 
 		const pityCounter4 = document.createElement("div");
 		const pityCounter4Label = document.createElement("span");
@@ -294,7 +293,8 @@ function renderView(banner:keyof typeof bannerCode | null){
 		pityCounter4Value.innerText = String(pity4);
 		pityCounter4.append(pityCounter4Label);
 		pityCounter4.append(pityCounter4Value);
-		overview.append(pityCounter4);
+		pityCounter4.classList.add("banner-overview");
+		overview.push(pityCounter4);
 
 		const pityCounter5 = document.createElement("div");
 		const pityCounter5Label = document.createElement("span");
@@ -305,7 +305,8 @@ function renderView(banner:keyof typeof bannerCode | null){
 		pityCounter5Value.innerText = String(pity5);
 		pityCounter5.append(pityCounter5Label);
 		pityCounter5.append(pityCounter5Value);
-		overview.append(pityCounter5);
+		pityCounter5.classList.add("banner-overview");
+		overview.push(pityCounter5);
 
 		const pullCounter = document.createElement("div");
 		pullCounter.innerHTML = `<div style="flex-direction: column; width: 100%">
@@ -317,15 +318,18 @@ function renderView(banner:keyof typeof bannerCode | null){
 			<span class="label">Primogems spent:</span>
 			<span class="value">${String(count*160)}</span>
 			</div></div>`;
-		overview.append(pullCounter);
+		pullCounter.classList.add("banner-overview");
+		overview.push(pullCounter);
 
 		//placeholder until i have a better idea to fill gap, doesnt actually work
 		const tmp1 = document.createElement("div");
 		tmp1.innerHTML = "<label>Hide 3 stars</label><input type=\"checkbox\" \"=\"\">\n";
-		overview.append(tmp1);
+		tmp1.classList.add("banner-overview");
+		overview.push(tmp1);
 		const tmp2 = document.createElement("div");
 		tmp2.innerHTML = "<label>Hide 4 stars</label><input type=\"checkbox\" \"=\"\">\n";
-		overview.append(tmp2);
+		tmp2.classList.add("banner-overview");
+		overview.push(tmp2);
 
 
 		return overview;
