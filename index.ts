@@ -1,4 +1,5 @@
 import {Pull_s, readHar} from "./har-reader.js";
+import {gachaCharToElement} from "./chara.js";
 
 const bannerCode = {
 	"100":"Beginners' Wish",
@@ -49,56 +50,6 @@ const gachaItemRarityToCss = {
 	"3":"r3",
 	"4":"r4",
 	"5":"r5",
-}
-const gachaCharToElement = {
-	"Albedo": "Geo",
-	"Aloy": "Cryo",
-	"Amber": "Pyro",
-	"Arataki Itto": "Geo",
-	"Barbara": "Hydro",
-	"Beidou": "Electro",
-	"Bennett": "Pyro",
-	"Chongyun": "Cryo",
-	"Diluc": "Pyro",
-	"Diona": "Cryo",
-	"Eula": "Cryo",
-	"Fischl": "Electro",
-	"Ganyu": "Cryo",
-	"Gorou": "Geo",
-	"Hu Tao": "Pyro",
-	"Jean": "Anemo",
-	"Kaedehara Kazuha": "Anemo",
-	"Kaeya": "Cryo",
-	"Kamisato Ayaka": "Cryo",
-	"Kamisato Ayato": "Hydro",
-	"Keqing": "Electro",
-	"Klee": "Pyro",
-	"Kujou Sara": "Electro",
-	"Lisa": "Electro",
-	"Mona": "Hydro",
-	"Ningguang": "Geo",
-	"Noelle": "Geo",
-	"Qiqi": "Cryo",
-	"Raiden Shogun": "Electro",
-	"Razor": "Electro",
-	"Rosaria": "Cryo",
-	"Sangonomiya Kokomi": "Hydro",
-	"Sayu": "Anemo",
-	"Shenhe": "Cryo",
-	"Sucrose": "Anemo",
-	"Tartaglia": "Hydro",
-	"Thoma": "Pyro",
-	"Venti": "Anemo",
-	"Xiangling": "Pyro",
-	"Xiao": "Anemo",
-	"Xingqiu": "Hydro",
-	"Xinyan": "Pyro",
-	"Yae Miko": "Electro",
-	"Yanfei": "Pyro",
-	"Yelan": "Hydro",
-	"Yoimiya": "Pyro",
-	"Yun Jin": "Geo",
-	"Zhongli": "Geo",
 }
 
 function bannerLookup(code, time){
@@ -271,10 +222,6 @@ function renderView(banner:keyof typeof bannerCode | null){
 	tableWrapper.classList.add("banner-table");
 	tableWrapper.append(table);
 	container.append(tableWrapper);
-
-	// const separator = document.createElement("div");
-	// separator.classList.add("separator");
-	// container.append(separator);
 
 	container.append(...makeOverview(pity4, pity5, count));
 

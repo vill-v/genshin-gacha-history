@@ -25,6 +25,9 @@ body{
 .ch.Cryo::before{
     background-image: url("img/cryo.png");
 }
+.ch.Dendro::before{
+    background-image: url("img/dendro.png");
+}
 .ch.Electro::before{
     background-image: url("img/electro.png");
 }
@@ -187,16 +190,31 @@ body{
     font-size: 20px;
     height: 100%;
 }
-.separator{
-    width: 5px;
-    height: 100%;
-    background-color: green;
-    cursor: col-resize;
+
+#banner-controls{
+    display: grid;
+    grid-auto-columns: minmax(max-content,150px);
+    grid-auto-flow: column;
 }
+#banner-controls > label{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    background-color: lavenderblush;
+    margin: 3px 1px;
+    border-radius: 50px;
+    border: 1px solid;
+}
+#banner-controls > label:hover{
+    background-color: brown;
+    cursor: pointer;
+}
+
 .banner-table{
     overflow-y: scroll;
     /*grid-row: 1 / -1; does not work with grid-auto-rows */
-    grid-row: 1 / 99; /*this unfortunately prevents grid-auto-flow from ever making more columns*/
+    grid-row: 1 / 6; /*firefox wont allow making imaginary rows*/
     font-size: 16px;
 }
 .banner-overview{
